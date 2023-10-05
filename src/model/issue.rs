@@ -11,7 +11,6 @@ pub struct Issue<'l> {
     created: DateTime<Local>,
     #[serde(serialize_with = "serialize_date", deserialize_with = "deserialize_date")]
     updated: DateTime<Local>,
-    resolution: Option<&'l str>,
     summary: &'l str,
 }
 
@@ -38,9 +37,8 @@ impl<'l> Issue<'l> {
         issue_type: &'l str,
         created: DateTime<Local>,
         updated: DateTime<Local>,
-        resolution: Option<&'l str>,
         summary: &'l str,
     ) -> Self {
-        Self { status, reporter, issue_type, created, updated, resolution, summary }
+        Self { status, reporter, issue_type, created, updated, summary }
     }
 }
