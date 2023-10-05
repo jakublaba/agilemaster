@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::model::issue::Issue;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct Project<'l> {
     name: &'l str,
     key: &'l str,
