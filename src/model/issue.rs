@@ -13,8 +13,6 @@ pub struct Issue<'l> {
     updated: DateTime<Local>,
     resolution: Option<&'l str>,
     summary: &'l str,
-    #[serde(rename = "externalId")]
-    external_id: i32,
 }
 
 fn serialize_date<S>(date: &DateTime<Local>, serializer: S) -> Result<S::Ok, S::Error>
@@ -31,4 +29,18 @@ fn deserialize_date<'de, D>(deserializer: D) -> Result<DateTime<Local>, D::Error
     let parsed_date = DateTime::parse_from_rfc3339(&date_str)
         .map_err(serde::de::Error::custom)?;
     Ok(parsed_date.with_timezone(&Local))
+}
+
+impl<'l> Issue<'l> {
+    pub fn new(
+        status: &'l str,
+        reporter: &'l str,
+        issue_type: &'l str,
+        created: DateTime<Local>,
+        updated: DateTime<Local>,
+        resolution: Option<&'l str>,
+        summary: &'l str,
+    ) -> Self {
+        Self { status, reporter, issue_type, created, updated, resolution, summary }
+    }
 }

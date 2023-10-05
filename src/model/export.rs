@@ -9,3 +9,12 @@ pub struct Export<'l> {
     users: Vec<User<'l>>,
     projects: Vec<Project<'l>>,
 }
+
+impl<'l> Export<'l> {
+    pub fn new(
+        users: Vec<User<'l>>,
+        projects: Vec<Project<'l>>,
+    ) -> Self {
+        Self { users, projects }
+    }
+}
