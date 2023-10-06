@@ -1,5 +1,6 @@
-use serde::{Deserializer, Serialize, Serializer};
+use serde::Serialize;
 
+use crate::model::history_entry::HistoryEntry;
 use crate::model::jira_date::JiraDate;
 
 #[derive(Serialize)]
@@ -11,6 +12,7 @@ pub struct Issue<'l> {
     created: JiraDate<'l>,
     updated: JiraDate<'l>,
     summary: &'l str,
+    history: Vec<HistoryEntry<'l>>,
 }
 
 impl<'l> Issue<'l> {
@@ -21,7 +23,8 @@ impl<'l> Issue<'l> {
         created: JiraDate<'l>,
         updated: JiraDate<'l>,
         summary: &'l str,
+        history: Vec<HistoryEntry<'l>>,
     ) -> Self {
-        Self { status, reporter, issue_type, created, updated, summary }
+        Self { status, reporter, issue_type, created, updated, summary, history }
     }
 }
