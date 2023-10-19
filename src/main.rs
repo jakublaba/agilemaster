@@ -1,5 +1,8 @@
+use std::error::Error;
+use std::io::Read;
+
 mod model;
 
-fn main() {
-    println!("Hello, world!");
+fn main() -> Result<(), Box<dyn Error>> {
+    Ok(())
 }

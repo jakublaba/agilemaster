@@ -1,8 +1,8 @@
-use serde::{Deserializer, Serialize, Serializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::model::jira_date::JiraDate;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Issue<'l> {
     status: &'l str,
     reporter: &'l str,
