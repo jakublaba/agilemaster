@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct Item<'l> {
     field: &'l str,
     #[serde(rename = "fieldType")]

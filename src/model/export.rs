@@ -3,7 +3,7 @@ use serde::Serialize;
 use crate::model::project::Project;
 use crate::model::user::User;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct Export<'l> {
     #[serde(borrow)]
     users: Vec<User<'l>>,

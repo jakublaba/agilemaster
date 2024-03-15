@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use crate::model::issue::Issue;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct Project<'l> {
     name: &'l str,
     #[serde(rename = "externalName")]

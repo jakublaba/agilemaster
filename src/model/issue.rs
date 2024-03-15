@@ -3,7 +3,7 @@ use serde::Serialize;
 use crate::model::history_entry::HistoryEntry;
 use crate::model::jira_date::JiraDate;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct Issue<'l> {
     status: &'l str,
     reporter: &'l str,
