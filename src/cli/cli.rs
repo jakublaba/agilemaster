@@ -1,4 +1,4 @@
-use chrono::{NaiveDate, ParseResult};
+use chrono::{DateTime, FixedOffset, NaiveDateTime, ParseResult, TimeZone};
 use clap::Parser;
 
 #[derive(Debug, Parser)]
@@ -6,19 +6,24 @@ use clap::Parser;
 pub(crate) struct Cli {
     /// Name of the generated project
     #[arg(short, long, value_name = "NAME")]
-    name: String,
+    pub(crate) name: String,
     /// Start date of the project
     #[arg(short, long, value_name = "START DATE", value_parser = parse_date)]
-    start: NaiveDate,
+    pub(crate) start: DateTime<FixedOffset>,
     /// End date of the project
     #[arg(short, long, value_name = "END DATE", value_parser = parse_date)]
-    end: NaiveDate,
+    pub(crate) end: DateTime<FixedOffset>,
     /// Amount of issues to generate
     #[arg(short, long, value_name = "ISSUE AMOUNT")]
-    issue_amount: i32,
+    pub(crate) issue_amount: i32,
 }
 
-fn parse_date(arg: &str) -> ParseResult<NaiveDate> {
-    let date = NaiveDate::parse_from_str(arg, "%d-%m-%Y")?;
-    Ok(date)
+fn parse_date(arg: &str) -> ParseResult<DateTime<FixedOffset>> {
+    let s = &format!("{arg} 00:00:00");
+    let naive = NaiveDateTime::parse_from_str(s, "%d-%m-%Y %H:%M:%S")?;
+    let Some(offset) = FixedOffset::east_opt(0) else {
+        panic!("Cannot parse date from cli")
+    };
+
+    Ok(offset.from_utc_datetime(&naive))
 }
