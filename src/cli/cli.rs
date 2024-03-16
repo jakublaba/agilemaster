@@ -8,13 +8,13 @@ pub(crate) struct Cli {
     #[arg(short, long, value_name = "NAME")]
     pub(crate) name: String,
     /// Start date of the project
-    #[arg(short, long, value_name = "START DATE", value_parser = parse_date)]
+    #[arg(short, long, value_name = "DATE", value_parser = parse_date)]
     pub(crate) start: DateTime<FixedOffset>,
     /// End date of the project
-    #[arg(short, long, value_name = "END DATE", value_parser = parse_date)]
+    #[arg(short, long, value_name = "DATE", value_parser = parse_date)]
     pub(crate) end: DateTime<FixedOffset>,
     /// Amount of issues to generate
-    #[arg(short, long, value_name = "ISSUE AMOUNT")]
+    #[arg(short, long, value_name = "AMOUNT")]
     pub(crate) issue_amount: i32,
 }
 
