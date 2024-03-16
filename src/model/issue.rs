@@ -1,7 +1,8 @@
+use chrono::{DateTime, Utc};
 use serde::Serialize;
 
 use crate::model::history_entry::HistoryEntry;
-use crate::model::jira_date::JiraDate;
+use crate::model::serialize_date;
 
 #[derive(Debug, Serialize)]
 pub struct Issue<'l> {
@@ -9,8 +10,10 @@ pub struct Issue<'l> {
     reporter: &'l str,
     #[serde(rename = "issueType")]
     issue_type: &'l str,
-    created: JiraDate<'l>,
-    updated: JiraDate<'l>,
+    #[serde(serialize_with = "serialize_date")]
+    created: DateTime<Utc>,
+    #[serde(serialize_with = "serialize_date")]
+    updated: DateTime<Utc>,
     summary: &'l str,
     history: Vec<HistoryEntry<'l>>,
 }
@@ -20,8 +23,8 @@ impl<'l> Issue<'l> {
         status: &'l str,
         reporter: &'l str,
         issue_type: &'l str,
-        created: JiraDate<'l>,
-        updated: JiraDate<'l>,
+        created: DateTime<Utc>,
+        updated: DateTime<Utc>,
         summary: &'l str,
         history: Vec<HistoryEntry<'l>>,
     ) -> Self {

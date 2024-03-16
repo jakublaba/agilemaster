@@ -10,7 +10,7 @@ mod cli;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
-    
+
     println!("{:?}", args);
 
     Ok(())
