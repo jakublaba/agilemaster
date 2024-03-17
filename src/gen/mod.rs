@@ -34,7 +34,7 @@ impl Display for AgileMasterError {
 
 impl std::error::Error for AgileMasterError {}
 
-pub fn generate_json(file_name: &'static str, args: &Cli) -> Result<(), AgileMasterError> {
+pub fn generate_json(project_name: &'static str, args: &Cli) -> Result<(), AgileMasterError> {
     let date_gen = &DateGenerator::new(args.start, args.end).map_err(|_| AgileMasterError)?;
     let hist_item_gen = &HistoryItemGenerator::new(vec![
         "TO DO",
@@ -43,15 +43,15 @@ pub fn generate_json(file_name: &'static str, args: &Cli) -> Result<(), AgileMas
     ]);
     let hist_entry_gen = &HistoryEntryGenerator::new(date_gen, hist_item_gen);
     let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen);
-    let proj_gen = ProjectGenerator::new(issue_gen);
+    let proj_gen = ProjectGenerator::new(project_name, args.issue_amount, issue_gen);
 
     let project = proj_gen.next();
     let json = serde_json::to_string(&project).map_err(|_| AgileMasterError)?;
 
-    save_to_file(file_name, json).map_err(|_| AgileMasterError)
+    save_to_file(format!("{project_name}.json"), json).map_err(|_| AgileMasterError)
 }
 
-fn save_to_file(file_name: &'static str, contents: String) -> Result<(), io::Error> {
+fn save_to_file(file_name: String, contents: String) -> Result<(), io::Error> {
     let mut file = File::create(file_name)?;
     file.write_all(contents.as_bytes())?;
 
