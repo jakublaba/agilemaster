@@ -28,6 +28,7 @@ impl<'l> ProjectGenerator<'l> {
 
 impl<'l> Generator<Project<'l>> for ProjectGenerator<'l> {
     fn next(&self) -> Project<'l> {
+        todo!();
         let mut issues = Vec::<Issue<'l>>::new();
         for _ in 0..self.issue_amount {
             issues.push(self.issue_gen.next());
