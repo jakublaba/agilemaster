@@ -9,13 +9,13 @@ pub(crate) struct IssueGenerator<'l> {
 }
 
 impl<'l> IssueGenerator<'l> {
-    pub fn new(date_gen: &DateGenerator, history_entry_gen: &HistoryEntryGenerator) -> Self {
+    pub fn new(date_gen: &'l DateGenerator, history_entry_gen: &'l HistoryEntryGenerator<'l>) -> Self {
         Self { date_gen, history_entry_gen }
     }
 }
 
-impl Generator<Issue> for IssueGenerator {
-    fn next(&self) -> Issue {
+impl<'l> Generator<Issue<'l>> for IssueGenerator<'l> {
+    fn next(&self) -> Issue<'l> {
         todo!()
     }
 }

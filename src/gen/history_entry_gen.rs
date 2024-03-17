@@ -8,14 +8,14 @@ pub(crate) struct HistoryEntryGenerator<'l> {
     history_item_gen: &'l HistoryItemGenerator<'l>,
 }
 
-impl HistoryEntryGenerator {
-    pub fn new(date_gen: &DateGenerator, history_item_gen: &HistoryItemGenerator) -> Self {
+impl<'l> HistoryEntryGenerator<'l> {
+    pub fn new(date_gen: &'l DateGenerator, history_item_gen: &'l HistoryItemGenerator<'l>) -> Self {
         Self { date_gen, history_item_gen }
     }
 }
 
-impl Generator<HistoryEntry> for HistoryEntryGenerator {
-    fn next(&self) -> HistoryEntry {
+impl<'l> Generator<HistoryEntry<'l>> for HistoryEntryGenerator<'l> {
+    fn next(&self) -> HistoryEntry<'l> {
         todo!()
     }
 }

@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct User<'l> {
     name: &'l str,
     groups: Vec<&'l str>,
@@ -21,4 +21,3 @@ impl<'l> User<'l> {
         Self { name, groups, active, email, full_name }
     }
 }
-

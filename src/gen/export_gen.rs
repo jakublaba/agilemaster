@@ -1,6 +1,3 @@
-use chrono::{DateTime, Utc};
-
-use crate::gen::date_gen::DateGenerator;
 use crate::gen::Generator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
 use crate::gen::history_item_gen::HistoryItemGenerator;
@@ -12,28 +9,27 @@ use crate::model::user::User;
 pub(crate) struct ExportGenerator<'l> {
     user: User<'l>,
     project_gen: &'l ProjectGenerator<'l>,
+    issue_gen: &'l IssueGenerator<'l>,
+    hist_entry_gen: &'l HistoryEntryGenerator<'l>,
+    hist_item_gen: &'l HistoryItemGenerator<'l>,
 }
 
 impl<'l> ExportGenerator<'l> {
     pub fn new(
-        user: User,
-        start_date: DateTime<Utc>,
-        end_date: DateTime<Utc>,
-        statuses: Vec<&str>,
+        user: User<'l>,
+        project_gen: &'l ProjectGenerator<'l>,
+        issue_gen: &'l IssueGenerator<'l>,
+        hist_entry_gen: &'l HistoryEntryGenerator<'l>,
+        hist_item_gen: &'l HistoryItemGenerator<'l>,
     ) -> Self {
-        let date_gen = &DateGenerator::new(start_date, end_date);
-        let hist_item_gen = &HistoryItemGenerator::new(statuses);
-        let hist_entry_gen = &HistoryEntryGenerator::new(date_gen, hist_item_gen);
-        let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen);
-        let project_gen = &ProjectGenerator::new(issue_gen);
-        Self { user, project_gen }
+        Self { user, project_gen, issue_gen, hist_entry_gen, hist_item_gen }
     }
 }
 
-impl<'l> Generator<Export> for ExportGenerator {
-    fn next(&self) -> Export {
+impl<'l> Generator<Export<'l>> for ExportGenerator<'l> {
+    fn next(&self) -> Export<'l> {
         Export::new(
-            vec![self.user],
+            vec![self.user.clone()],
             vec![self.project_gen.next()],
         )
     }

@@ -10,7 +10,6 @@ pub(crate) mod export_gen;
 pub(crate) mod history_entry_gen;
 pub(crate) mod history_item_gen;
 pub(crate) mod project_gen;
-pub(crate) mod user_gen;
 
 // todo fix lifetimes and maybe wrap return type in Option or Result
 pub(crate) trait Generator<T> {

@@ -11,8 +11,8 @@ impl<'l> HistoryItemGenerator<'l> {
     }
 }
 
-impl<'l> Generator<HistoryItem> for HistoryItemGenerator<'l> {
-    fn next(&self) -> HistoryItem {
+impl<'l> Generator<HistoryItem<'l>> for HistoryItemGenerator<'l> {
+    fn next(&self) -> HistoryItem<'l> {
         todo!()
     }
 }

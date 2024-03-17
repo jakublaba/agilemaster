@@ -6,14 +6,14 @@ pub(crate) struct ProjectGenerator<'l> {
     issue_gen: &'l IssueGenerator<'l>,
 }
 
-impl ProjectGenerator {
-    pub fn new(issue_gen: &IssueGenerator) -> Self {
+impl<'l> ProjectGenerator<'l> {
+    pub fn new(issue_gen: &'l IssueGenerator<'l>) -> Self {
         Self { issue_gen }
     }
 }
 
-impl Generator<Project> for ProjectGenerator {
-    fn next(&self) -> Project {
+impl<'l> Generator<Project<'l>> for ProjectGenerator<'l> {
+    fn next(&self) -> Project<'l> {
         todo!()
     }
 }

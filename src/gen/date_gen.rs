@@ -5,8 +5,6 @@ use chrono::{DateTime, Duration, Utc};
 use rand::{Rng, thread_rng};
 use rand::rngs::ThreadRng;
 
-use crate::gen::Generator;
-
 pub(crate) struct DateGenerator {
     start_date: DateTime<Utc>,
     range: i64,
@@ -25,7 +23,7 @@ impl Display for DateGeneratorError {
 impl Error for DateGeneratorError {}
 
 impl DateGenerator {
-    pub(crate) fn new(start_date: DateTime<Utc>, end_date: DateTime<Utc>) -> Result<Self, impl Error> {
+    pub fn new(start_date: DateTime<Utc>, end_date: DateTime<Utc>) -> Result<Self, DateGeneratorError> {
         if start_date >= end_date {
             return Err(DateGeneratorError);
         }
@@ -35,16 +33,14 @@ impl DateGenerator {
         Ok(Self { start_date, range, rng })
     }
 
-    pub(crate) fn gen_after(&mut self, date: DateTime<Utc>) -> DateTime<Utc> {
-        let range = (date - self.start_date).num_days();
-        let days = self.rng.gen_range(0..=range);
+    pub fn next(&mut self) -> DateTime<Utc> {
+        let days = self.rng.gen_range(0..=self.range);
         self.start_date + Duration::days(days)
     }
-}
 
-impl Generator<DateTime<Utc>> for DateGenerator {
-    fn next(&mut self) -> DateTime<Utc> {
-        let days = self.rng.gen_range(0..=self.range);
+    pub fn gen_after(&mut self, date: DateTime<Utc>) -> DateTime<Utc> {
+        let range = (date - self.start_date).num_days();
+        let days = self.rng.gen_range(0..=range);
         self.start_date + Duration::days(days)
     }
 }
