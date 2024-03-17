@@ -4,20 +4,20 @@ use std::io::Write;
 
 use crate::cli::cli::Cli;
 
-mod issue_gen;
-mod date_gen;
-mod export_gen;
-mod history_entry_gen;
-mod history_item_gen;
-mod project_gen;
-mod user_gen;
+pub(crate) mod issue_gen;
+pub(crate) mod date_gen;
+pub(crate) mod export_gen;
+pub(crate) mod history_entry_gen;
+pub(crate) mod history_item_gen;
+pub(crate) mod project_gen;
+pub(crate) mod user_gen;
 
 // todo fix lifetimes and maybe wrap return type in Option or Result
 pub(crate) trait Generator<T> {
     fn next(&self) -> T;
 }
 
-pub fn generate_json(args: Cli) -> Result<(), io::Error> {
+pub fn generate_json(args: &Cli) -> Result<(), io::Error> {
     // todo Extracts args from CLI and generates result json file
     Ok(())
 }

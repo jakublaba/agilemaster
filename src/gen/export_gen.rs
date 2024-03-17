@@ -30,7 +30,7 @@ impl<'l> ExportGenerator<'l> {
     }
 }
 
-impl Generator<Export> for ExportGenerator {
+impl<'l> Generator<Export> for ExportGenerator {
     fn next(&self) -> Export {
         Export::new(
             vec![self.user],
