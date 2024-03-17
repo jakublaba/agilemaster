@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
-pub struct Item<'l> {
+pub struct HistoryItem<'l> {
     field: &'l str,
     #[serde(rename = "fieldType")]
     field_type: &'l str,
@@ -13,7 +13,7 @@ pub struct Item<'l> {
     to: &'l str,
 }
 
-impl<'l> Item<'l> {
+impl<'l> HistoryItem<'l> {
     pub fn new(
         field: &'l str,
         from: &'l str,
