@@ -15,27 +15,27 @@ fn proj_key(name: &str) -> String {
 }
 
 pub(crate) struct ProjectGenerator<'l> {
-    name: &'l str,
+    name: String,
     issue_amount: i32,
     issue_gen: &'l IssueGenerator<'l>,
 }
 
 impl<'l> ProjectGenerator<'l> {
-    pub fn new(name: &'l str, issue_amount: i32, issue_gen: &'l IssueGenerator<'l>) -> Self {
+    pub fn new(name: String, issue_amount: i32, issue_gen: &'l IssueGenerator<'l>) -> Self {
         Self { name, issue_amount, issue_gen }
     }
 }
 
-impl<'l> Generator<Project<'l>> for ProjectGenerator<'l> {
-    fn next(&self) -> Project<'l> {
-        todo!();
-        let mut issues = Vec::<Issue<'l>>::new();
+impl<'l> Generator<Project> for ProjectGenerator<'l> {
+    fn generate(&self) -> Project {
+        let mut issues = Vec::<Issue>::new();
         for _ in 0..self.issue_amount {
-            issues.push(self.issue_gen.next());
+            issues.push(self.issue_gen.generate());
         }
+        let key = proj_key(&self.name);
         Project::new(
-            self.name,
-            &proj_key(self.name),
+            self.name.clone(),
+            key,
             issues,
         )
     }

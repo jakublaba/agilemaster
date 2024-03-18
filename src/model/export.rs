@@ -5,7 +5,6 @@ use crate::model::user::User;
 
 #[derive(Debug, Serialize)]
 pub struct Export {
-    #[serde(borrow)]
     users: Vec<User>,
     projects: Vec<Project>,
 }

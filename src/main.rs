@@ -16,5 +16,5 @@ fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
     dbg!(&args);
 
-    generate_json("export.json", &args)
+    generate_json(String::from("export.json"), &args)
 }

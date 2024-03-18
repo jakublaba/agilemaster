@@ -20,8 +20,8 @@ impl HistoryItem {
         to: String,
     ) -> Self {
         Self {
-            field,
-            field_type: field.clone(),
+            field: field.clone(),
+            field_type: field,
             from_string: from.clone(),
             from,
             to_string: to.clone(),

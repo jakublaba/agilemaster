@@ -1,18 +1,18 @@
 use crate::gen::Generator;
 use crate::model::history_item::HistoryItem;
 
-pub(crate) struct HistoryItemGenerator<'l> {
-    statuses: Vec<&'l str>,
+pub(crate) struct HistoryItemGenerator {
+    statuses: Vec<String>,
 }
 
-impl<'l> HistoryItemGenerator<'l> {
-    pub fn new(statuses: Vec<&'l str>) -> Self {
+impl HistoryItemGenerator {
+    pub fn new(statuses: Vec<String>) -> Self {
         Self { statuses }
     }
 }
 
-impl<'l> Generator<HistoryItem<'l>> for HistoryItemGenerator<'l> {
-    fn next(&self) -> HistoryItem<'l> {
+impl Generator<HistoryItem> for HistoryItemGenerator {
+    fn generate(&self) -> HistoryItem {
         todo!()
     }
 }

@@ -20,7 +20,7 @@ pub(crate) mod history_item_gen;
 pub(crate) mod project_gen;
 
 pub(crate) trait Generator<T> {
-    fn next(&self) -> T;
+    fn generate(&self) -> T;
 }
 
 #[derive(Debug)]
@@ -34,18 +34,19 @@ impl Display for AgileMasterError {
 
 impl std::error::Error for AgileMasterError {}
 
-pub fn generate_json(project_name: &'static str, args: &Cli) -> Result<(), AgileMasterError> {
+pub fn generate_json(project_name: String, args: &Cli) -> Result<(), AgileMasterError> {
+    let statuses = vec![
+        String::from("TO DO"),
+        String::from("IN PROGRESS"),
+        String::from("DONE"),
+    ];
     let date_gen = &DateGenerator::new(args.start, args.end).map_err(|_| AgileMasterError)?;
-    let hist_item_gen = &HistoryItemGenerator::new(vec![
-        "TO DO",
-        "IN PROGRESS",
-        "DONE",
-    ]);
+    let hist_item_gen = &HistoryItemGenerator::new(statuses.clone());
     let hist_entry_gen = &HistoryEntryGenerator::new(date_gen, hist_item_gen);
-    let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen);
-    let proj_gen = ProjectGenerator::new(project_name, args.issue_amount, issue_gen);
+    let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen, statuses);
+    let proj_gen = ProjectGenerator::new(project_name.clone(), args.issue_amount, issue_gen);
 
-    let project = proj_gen.next();
+    let project = proj_gen.generate();
     let json = serde_json::to_string(&project).map_err(|_| AgileMasterError)?;
 
     save_to_file(format!("{project_name}.json"), json).map_err(|_| AgileMasterError)
