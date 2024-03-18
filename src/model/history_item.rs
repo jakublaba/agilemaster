@@ -1,30 +1,30 @@
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
-pub struct HistoryItem<'l> {
-    field: &'l str,
+pub struct HistoryItem {
+    field: String,
     #[serde(rename = "fieldType")]
-    field_type: &'l str,
+    field_type: String,
     #[serde(rename = "fromString")]
-    from_string: &'l str,
-    from: &'l str,
+    from_string: String,
+    from: String,
     #[serde(rename = "toString")]
-    to_string: &'l str,
-    to: &'l str,
+    to_string: String,
+    to: String,
 }
 
-impl<'l> HistoryItem<'l> {
+impl HistoryItem {
     pub fn new(
-        field: &'l str,
-        from: &'l str,
-        to: &'l str,
+        field: String,
+        from: String,
+        to: String,
     ) -> Self {
         Self {
             field,
-            field_type: field,
-            from_string: from,
+            field_type: field.clone(),
+            from_string: from.clone(),
             from,
-            to_string: to,
+            to_string: to.clone(),
             to,
         }
     }

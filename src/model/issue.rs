@@ -5,28 +5,28 @@ use crate::model::history_entry::HistoryEntry;
 use crate::model::serialize_date;
 
 #[derive(Debug, Serialize)]
-pub struct Issue<'l> {
-    status: &'l str,
-    reporter: &'l str,
+pub struct Issue {
+    status: String,
+    reporter: String,
     #[serde(rename = "issueType")]
-    issue_type: &'l str,
+    issue_type: String,
     #[serde(serialize_with = "serialize_date")]
     created: DateTime<Utc>,
     #[serde(serialize_with = "serialize_date")]
     updated: DateTime<Utc>,
-    summary: &'l str,
-    history: Vec<HistoryEntry<'l>>,
+    summary: String,
+    history: Vec<HistoryEntry>,
 }
 
-impl<'l> Issue<'l> {
+impl Issue {
     pub fn new(
-        status: &'l str,
-        reporter: &'l str,
-        issue_type: &'l str,
+        status: String,
+        reporter: String,
+        issue_type: String,
         created: DateTime<Utc>,
         updated: DateTime<Utc>,
-        summary: &'l str,
-        history: Vec<HistoryEntry<'l>>,
+        summary: String,
+        history: Vec<HistoryEntry>,
     ) -> Self {
         Self { status, reporter, issue_type, created, updated, summary, history }
     }

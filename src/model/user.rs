@@ -1,22 +1,22 @@
 use serde::Serialize;
 
 #[derive(Debug, Serialize, Clone)]
-pub struct User<'l> {
-    name: &'l str,
-    groups: Vec<&'l str>,
+pub struct User {
+    name: String,
+    groups: Vec<String>,
     active: bool,
-    email: &'l str,
+    email: String,
     #[serde(rename = "fullname")]
-    full_name: &'l str,
+    full_name: String,
 }
 
-impl<'l> User<'l> {
+impl User {
     pub fn new(
-        name: &'l str,
-        groups: Vec<&'l str>,
+        name: String,
+        groups: Vec<String>,
         active: bool,
-        email: &'l str,
-        full_name: &'l str,
+        email: String,
+        full_name: String,
     ) -> Self {
         Self { name, groups, active, email, full_name }
     }
