@@ -8,7 +8,6 @@ use serde::de::Error;
 use crate::cli::cli::Cli;
 use crate::gen::date_gen::DateGenerator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
-use crate::gen::history_item_gen::HistoryItemGenerator;
 use crate::gen::issue_gen::IssueGenerator;
 use crate::gen::project_gen::ProjectGenerator;
 
@@ -16,11 +15,10 @@ pub(crate) mod issue_gen;
 pub(crate) mod date_gen;
 pub(crate) mod export_gen;
 pub(crate) mod history_entry_gen;
-pub(crate) mod history_item_gen;
 pub(crate) mod project_gen;
 
 pub(crate) trait Generator<T> {
-    fn generate(&self) -> T;
+    fn generate(&mut self) -> T;
 }
 
 #[derive(Debug)]
@@ -41,9 +39,8 @@ pub fn generate_json(project_name: String, args: &Cli) -> Result<(), AgileMaster
         String::from("DONE"),
     ];
     let date_gen = &DateGenerator::new(args.start, args.end).map_err(|_| AgileMasterError)?;
-    let hist_item_gen = &HistoryItemGenerator::new(statuses.clone());
-    let hist_entry_gen = &HistoryEntryGenerator::new(date_gen, hist_item_gen);
-    let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen, statuses);
+    let hist_entry_gen = &HistoryEntryGenerator::new(date_gen, &statuses);
+    let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen, &statuses);
     let proj_gen = ProjectGenerator::new(project_name.clone(), args.issue_amount, issue_gen);
 
     let project = proj_gen.generate();

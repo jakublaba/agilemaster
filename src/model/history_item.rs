@@ -1,5 +1,7 @@
 use serde::Serialize;
 
+const FIELD: &str = "status";
+
 #[derive(Debug, Serialize)]
 pub struct HistoryItem {
     field: String,
@@ -15,13 +17,12 @@ pub struct HistoryItem {
 
 impl HistoryItem {
     pub fn new(
-        field: String,
         from: String,
         to: String,
     ) -> Self {
         Self {
-            field: field.clone(),
-            field_type: field,
+            field: String::from(FIELD),
+            field_type: String::from(FIELD),
             from_string: from.clone(),
             from,
             to_string: to.clone(),
