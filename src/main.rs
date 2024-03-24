@@ -1,17 +1,20 @@
 use std::error::Error;
+use std::fmt::Display;
 use std::io::Write;
 
 use clap::Parser;
 
 use crate::cli::cli::Cli;
+use crate::gen::generate_json;
 
 mod model;
 mod cli;
+mod gen;
 
-fn main() -> Result<(), Box<dyn Error>> {
+// todo add loggers
+fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
+    dbg!(&args);
 
-    println!("{:?}", args);
-
-    Ok(())
+    generate_json(&args.name, &args)
 }

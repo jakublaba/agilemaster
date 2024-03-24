@@ -4,16 +4,15 @@ use crate::model::project::Project;
 use crate::model::user::User;
 
 #[derive(Debug, Serialize)]
-pub struct Export<'l> {
-    #[serde(borrow)]
-    users: Vec<User<'l>>,
-    projects: Vec<Project<'l>>,
+pub struct Export {
+    users: Vec<User>,
+    projects: Vec<Project>,
 }
 
-impl<'l> Export<'l> {
+impl Export {
     pub fn new(
-        users: Vec<User<'l>>,
-        projects: Vec<Project<'l>>,
+        users: Vec<User>,
+        projects: Vec<Project>,
     ) -> Self {
         Self { users, projects }
     }
