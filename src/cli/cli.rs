@@ -5,8 +5,11 @@ use clap::Parser;
 #[command(version, author, about, long_about = None)]
 pub(crate) struct Cli {
     /// Name of the generated project
-    #[arg(short, long, value_name = "NAME")]
+    #[arg(short, long)]
     pub(crate) name: String,
+    /// Jira username or email to appear as the project author
+    #[arg(short, long)]
+    pub(crate) author: String,
     /// Start date of the project (dd-mm-YYYY)
     #[arg(short, long, value_name = "DATE", value_parser = parse_date)]
     pub(crate) start: DateTime<Utc>,

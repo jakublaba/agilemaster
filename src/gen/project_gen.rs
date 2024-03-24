@@ -1,3 +1,4 @@
+use crate::cli::cli::Cli;
 use crate::gen::Generator;
 use crate::gen::issue_gen::IssueGenerator;
 use crate::model::issue::Issue;
@@ -17,11 +18,13 @@ fn proj_key(name: &str) -> String {
 pub(crate) struct ProjectGenerator<'l> {
     name: String,
     issue_amount: i32,
-    issue_gen: &'l IssueGenerator<'l>,
+    issue_gen: &'l mut IssueGenerator<'l>,
 }
 
 impl<'l> ProjectGenerator<'l> {
-    pub fn new(name: String, issue_amount: i32, issue_gen: &'l IssueGenerator<'l>) -> Self {
+    pub fn new(cli_args: &'l Cli, issue_gen: &'l mut IssueGenerator<'l>) -> Self {
+        let name = cli_args.name.clone();
+        let issue_amount = cli_args.issue_amount;
         Self { name, issue_amount, issue_gen }
     }
 }

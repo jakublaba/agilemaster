@@ -6,7 +6,6 @@ use std::io::Write;
 use serde::de::Error;
 
 use crate::cli::cli::Cli;
-use crate::gen::date_gen::DateGenerator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
 use crate::gen::issue_gen::IssueGenerator;
 use crate::gen::project_gen::ProjectGenerator;
@@ -32,16 +31,15 @@ impl Display for AgileMasterError {
 
 impl std::error::Error for AgileMasterError {}
 
-pub fn generate_json(project_name: String, args: &Cli) -> Result<(), AgileMasterError> {
+pub fn generate_json(project_name: &String, args: &Cli) -> Result<(), AgileMasterError> {
     let statuses = vec![
         String::from("TO DO"),
         String::from("IN PROGRESS"),
         String::from("DONE"),
     ];
-    let date_gen = &DateGenerator::new(args.start, args.end).map_err(|_| AgileMasterError)?;
-    let hist_entry_gen = &HistoryEntryGenerator::new(date_gen, &statuses);
-    let issue_gen = &IssueGenerator::new(date_gen, hist_entry_gen, &statuses);
-    let proj_gen = ProjectGenerator::new(project_name.clone(), args.issue_amount, issue_gen);
+    let hist_entry_gen = &mut HistoryEntryGenerator::new(args, &statuses)?;
+    let issue_gen = &mut IssueGenerator::new(args, hist_entry_gen, &statuses)?;
+    let mut proj_gen = ProjectGenerator::new(args, issue_gen);
 
     let project = proj_gen.generate();
     let json = serde_json::to_string(&project).map_err(|_| AgileMasterError)?;

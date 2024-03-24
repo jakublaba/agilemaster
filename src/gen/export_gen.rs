@@ -5,13 +5,13 @@ use crate::model::user::User;
 
 pub(crate) struct ExportGenerator<'l> {
     user: User,
-    project_gen: &'l ProjectGenerator<'l>,
+    project_gen: &'l mut ProjectGenerator<'l>,
 }
 
 impl<'l> ExportGenerator<'l> {
     pub fn new(
         user: User,
-        project_gen: &'l ProjectGenerator<'l>,
+        project_gen: &'l mut ProjectGenerator<'l>,
     ) -> Self {
         Self { user, project_gen }
     }

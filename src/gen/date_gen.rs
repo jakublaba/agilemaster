@@ -5,6 +5,8 @@ use chrono::{DateTime, Duration, Utc};
 use rand::{Rng, thread_rng};
 use rand::rngs::ThreadRng;
 
+use crate::cli::cli::Cli;
+
 #[derive(Debug)]
 pub(crate) struct DateGeneratorError {
     message: String,
@@ -24,6 +26,7 @@ impl Display for DateGeneratorError {
 
 impl Error for DateGeneratorError {}
 
+#[derive(Clone)]
 pub(crate) struct DateGenerator {
     start_date: DateTime<Utc>,
     end_date: DateTime<Utc>,
@@ -32,7 +35,9 @@ pub(crate) struct DateGenerator {
 }
 
 impl DateGenerator {
-    pub fn new(start_date: DateTime<Utc>, end_date: DateTime<Utc>) -> Result<Self, DateGeneratorError> {
+    pub fn new(cli_args: &Cli) -> Result<Self, DateGeneratorError> {
+        let start_date = cli_args.start;
+        let end_date = cli_args.end;
         if start_date >= end_date {
             return Err(DateGeneratorError::new("end_date must be after start_date"));
         }

@@ -1,30 +1,56 @@
 use rand::rngs::ThreadRng;
 
+use crate::cli::cli::Cli;
+use crate::gen::{AgileMasterError, Generator};
 use crate::gen::date_gen::DateGenerator;
-use crate::gen::Generator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
 use crate::model::issue::Issue;
 
 pub(crate) struct IssueGenerator<'l> {
+    counter: i32,
     rng: ThreadRng,
-    date_gen: &'l DateGenerator,
-    history_entry_gen: &'l HistoryEntryGenerator<'l>,
+    date_gen: DateGenerator,
+    reporter: String,
+    history_entry_gen: &'l mut HistoryEntryGenerator<'l>,
     statuses: &'l Vec<String>,
 }
 
 impl<'l> IssueGenerator<'l> {
     pub fn new(
-        date_gen: &'l DateGenerator,
-        history_entry_gen: &'l HistoryEntryGenerator<'l>,
+        cli_args: &'l Cli,
+        history_entry_gen: &'l mut HistoryEntryGenerator<'l>,
         statuses: &'l Vec<String>,
-    ) -> Self {
+    ) -> Result<Self, AgileMasterError> {
+        let counter = 1;
         let rng = rand::thread_rng();
-        Self { rng, date_gen, history_entry_gen, statuses }
+        let date_gen = DateGenerator::new(cli_args).map_err(|_| AgileMasterError)?;
+        let reporter = cli_args.author.clone();
+        Ok(Self { counter, rng, date_gen, reporter, history_entry_gen, statuses })
     }
 }
 
 impl<'l> Generator<Issue> for IssueGenerator<'l> {
     fn generate(&mut self) -> Issue {
-        todo!()
+        let (status, history) = self.history_entry_gen.generate();
+        let created = if let Some(entry) = history.first() {
+            entry.created
+        } else {
+            self.date_gen.next()
+        };
+        let updated = if let Some(entry) = history.last() {
+            entry.created
+        } else {
+            self.date_gen.gen_after(created).unwrap()
+        };
+        let issue = Issue::new(
+            status,
+            self.reporter.clone(),
+            created,
+            updated,
+            format!("Summary {}", self.counter),
+            history,
+        );
+        self.counter += 1;
+        issue
     }
 }

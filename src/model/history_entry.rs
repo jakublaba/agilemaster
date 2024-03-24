@@ -8,7 +8,7 @@ use crate::model::serialize_date;
 pub struct HistoryEntry {
     author: String,
     #[serde(serialize_with = "serialize_date")]
-    created: DateTime<Utc>,
+    pub(crate) created: DateTime<Utc>,
     items: Vec<HistoryItem>,
 }
 

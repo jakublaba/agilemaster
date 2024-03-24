@@ -2,22 +2,25 @@ use rand::prelude::SliceRandom;
 use rand::rngs::ThreadRng;
 use rand::thread_rng;
 
+use crate::cli::cli::Cli;
+use crate::gen::{AgileMasterError, Generator};
 use crate::gen::date_gen::DateGenerator;
-use crate::gen::Generator;
 use crate::model::history_entry::HistoryEntry;
 use crate::model::history_item::HistoryItem;
 
 pub(crate) struct HistoryEntryGenerator<'l> {
     rng: ThreadRng,
     author: &'l String,
-    date_gen: &'l DateGenerator,
+    date_gen: DateGenerator,
     statuses: &'l Vec<String>,
 }
 
 impl<'l> HistoryEntryGenerator<'l> {
-    pub fn new(author: &'l String, date_gen: &'l DateGenerator, statuses: &'l Vec<String>) -> Self {
+    pub fn new(cli_args: &'l Cli, statuses: &'l Vec<String>) -> Result<Self, AgileMasterError> {
         let rng = thread_rng();
-        Self { rng, author, date_gen, statuses }
+        let author = &cli_args.author;
+        let date_gen = DateGenerator::new(cli_args).map_err(|_| AgileMasterError)?;
+        Ok(Self { rng, author, date_gen, statuses })
     }
 
     fn rand_status(&mut self) -> &String {
@@ -25,24 +28,22 @@ impl<'l> HistoryEntryGenerator<'l> {
     }
 }
 
-impl<'l> Generator<HistoryEntry> for HistoryEntryGenerator<'l> {
-    fn generate(&mut self) -> HistoryEntry {
+impl<'l> Generator<(String, Vec<HistoryEntry>)> for HistoryEntryGenerator<'l> {
+    fn generate(&mut self) -> (String, Vec<HistoryEntry>) {
         let status = self.rand_status().clone();
-        let created = self.date_gen.next();
-        let mut items = Vec::<HistoryItem>::new();
+        let mut entries = Vec::<HistoryEntry>::new();
+        let mut created = self.date_gen.next();
         let mut i = 0;
         while self.statuses[i] != status {
             let from = self.statuses[i].clone();
             let to = self.statuses[i + 1].clone();
-            let item = HistoryItem::new(from, to);
-            items.push(item);
+            let items = vec![HistoryItem::new(from, to)];
+            let entry = HistoryEntry::new(self.author.clone(), created.clone(), items);
+            entries.push(entry);
             i += 1;
+            created = self.date_gen.gen_after(created).unwrap();
         }
 
-        HistoryEntry::new(
-            self.author.clone(),
-            created,
-            items,
-        )
+        (status, entries)
     }
 }
