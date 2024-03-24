@@ -6,9 +6,11 @@ use std::io::Write;
 use serde::de::Error;
 
 use crate::cli::cli::Cli;
+use crate::gen::export_gen::ExportGenerator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
 use crate::gen::issue_gen::IssueGenerator;
 use crate::gen::project_gen::ProjectGenerator;
+use crate::model::user::User;
 
 pub(crate) mod issue_gen;
 pub(crate) mod date_gen;
@@ -39,10 +41,18 @@ pub fn generate_json(project_name: &String, args: &Cli) -> Result<(), AgileMaste
     ];
     let hist_entry_gen = &mut HistoryEntryGenerator::new(args, &statuses)?;
     let issue_gen = &mut IssueGenerator::new(args, hist_entry_gen, &statuses)?;
-    let mut proj_gen = ProjectGenerator::new(args, issue_gen);
+    let proj_gen = &mut ProjectGenerator::new(args, issue_gen);
+    let usr = User::new(
+        String::from("jakublaba"),
+        vec![],
+        true,
+        String::from("jakub.maciej.laba@gmail.com"),
+        String::from("Jakub Łaba"),
+    );
+    let mut export_gen = ExportGenerator::new(usr, proj_gen);
 
-    let project = proj_gen.generate();
-    let json = serde_json::to_string(&project).map_err(|_| AgileMasterError)?;
+    let export = export_gen.generate();
+    let json = serde_json::to_string(&export).map_err(|_| AgileMasterError)?;
 
     save_to_file(format!("{project_name}.json"), json).map_err(|_| AgileMasterError)
 }

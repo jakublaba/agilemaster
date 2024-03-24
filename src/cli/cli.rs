@@ -1,6 +1,7 @@
 use chrono::{DateTime, NaiveDateTime, ParseResult, Utc};
 use clap::Parser;
 
+// todo replace "author" with user and load it using some user.json file path as argument
 #[derive(Debug, Parser)]
 #[command(version, author, about, long_about = None)]
 pub(crate) struct Cli {
