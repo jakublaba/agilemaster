@@ -39,9 +39,9 @@ pub fn generate_json(project_name: &String, args: &Cli) -> Result<(), AgileMaste
         String::from("IN PROGRESS"),
         String::from("DONE"),
     ];
-    let hist_entry_gen = &mut HistoryEntryGenerator::new(args, &statuses)?;
-    let issue_gen = &mut IssueGenerator::new(args, hist_entry_gen, &statuses)?;
-    let proj_gen = &mut ProjectGenerator::new(args, issue_gen);
+    let mut hist_entry_gen = HistoryEntryGenerator::new(args, &statuses)?;
+    let mut issue_gen = IssueGenerator::new(args, &mut hist_entry_gen, &statuses)?;
+    let mut proj_gen = ProjectGenerator::new(args, &mut issue_gen);
     let usr = User::new(
         String::from("jakublaba"),
         vec![],
@@ -49,7 +49,7 @@ pub fn generate_json(project_name: &String, args: &Cli) -> Result<(), AgileMaste
         String::from("jakub.maciej.laba@gmail.com"),
         String::from("Jakub Łaba"),
     );
-    let mut export_gen = ExportGenerator::new(usr, proj_gen);
+    let mut export_gen = ExportGenerator::new(usr, &mut proj_gen);
 
     let export = export_gen.generate();
     let json = serde_json::to_string(&export).map_err(|_| AgileMasterError)?;

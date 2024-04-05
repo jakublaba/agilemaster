@@ -40,7 +40,7 @@ impl<'l> Generator<Issue> for IssueGenerator<'l> {
         let updated = if let Some(entry) = history.last() {
             entry.created
         } else {
-            self.date_gen.gen_after(created).unwrap()
+            self.date_gen.next_after(created).unwrap()
         };
         let issue = Issue::new(
             status,

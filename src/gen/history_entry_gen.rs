@@ -20,6 +20,7 @@ impl<'l> HistoryEntryGenerator<'l> {
         let rng = thread_rng();
         let author = &cli_args.author;
         let date_gen = DateGenerator::new(cli_args).map_err(|_| AgileMasterError)?;
+        dbg!(&date_gen);
         Ok(Self { rng, author, date_gen, statuses })
     }
 
@@ -33,6 +34,7 @@ impl<'l> Generator<(String, Vec<HistoryEntry>)> for HistoryEntryGenerator<'l> {
         let status = self.rand_status().clone();
         let mut entries = Vec::<HistoryEntry>::new();
         let mut created = self.date_gen.next();
+        dbg!(created);
         let mut i = 0;
         while self.statuses[i] != status {
             let from = self.statuses[i].clone();
@@ -41,7 +43,7 @@ impl<'l> Generator<(String, Vec<HistoryEntry>)> for HistoryEntryGenerator<'l> {
             let entry = HistoryEntry::new(self.author.clone(), created.clone(), items);
             entries.push(entry);
             i += 1;
-            created = self.date_gen.gen_after(created).unwrap();
+            created = self.date_gen.next_after(created).unwrap();
         }
 
         (status, entries)
