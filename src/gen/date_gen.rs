@@ -42,23 +42,36 @@ impl DateGenerator {
             let msg = format!("end_date must be after start_date, was end_date={end_date}, start_date={start_date}");
             return Err(DateGeneratorError::new(&msg));
         }
-        let range = (end_date - start_date).num_days() - 1;
+        let range = (end_date - start_date).num_days();
         let rng = thread_rng();
         Ok(Self { start_date, end_date, range, rng })
     }
 
     pub fn next(&mut self) -> DateTime<Utc> {
-        let days = self.rng.gen_range(0..self.range) + 1;
+        let days = self.rng.gen_range(1..self.range);
         self.start_date + TimeDelta::try_days(days).unwrap()
     }
 
     pub fn next_after(&mut self, date: DateTime<Utc>) -> Result<DateTime<Utc>, DateGeneratorError> {
-        if date <= self.start_date {
-            let msg = format!("date must be after start_date, was date={date}, start_date={}", self.start_date);
+        self.validate_date(&date)?;
+        let range = (self.end_date - date).num_days();
+        let days = self.rng.gen_range(0..range);
+        Ok(date + TimeDelta::try_days(days).unwrap())
+    }
+
+    pub fn next_before(&mut self, date: DateTime<Utc>) -> Result<DateTime<Utc>, DateGeneratorError> {
+        self.validate_date(&date)?;
+        let range = (date - self.start_date).num_days();
+        let days = self.rng.gen_range(0..range);
+        Ok(date - TimeDelta::try_days(days).unwrap())
+    }
+
+    fn validate_date(&self, date: &DateTime<Utc>) -> Result<(), DateGeneratorError> {
+        let range = (self.start_date + TimeDelta::try_days(1).unwrap())..self.end_date;
+        if !range.contains(date) {
+            let msg = format!("date must be in inclusive range ({}, {}), was {date}", range.start, range.end - TimeDelta::try_days(1).unwrap());
             return Err(DateGeneratorError::new(&msg));
         }
-        let range = (self.end_date - date).num_days();
-        let days = self.rng.gen_range(0..range) + 1;
-        Ok(self.start_date + TimeDelta::try_days(days).unwrap())
+        Ok(())
     }
 }

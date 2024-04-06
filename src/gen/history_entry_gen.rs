@@ -34,7 +34,6 @@ impl<'l> Generator<(String, Vec<HistoryEntry>)> for HistoryEntryGenerator<'l> {
         let status = self.rand_status().clone();
         let mut entries = Vec::<HistoryEntry>::new();
         let mut created = self.date_gen.next();
-        dbg!(created);
         let mut i = 0;
         while self.statuses[i] != status {
             let from = self.statuses[i].clone();
