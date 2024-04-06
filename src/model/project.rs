@@ -2,30 +2,33 @@ use serde::Serialize;
 
 use crate::model::issue::Issue;
 
+const PROJECT_TYPE: &str = "software";
+const TEMPLATE: &str = "com.pyxis.greenhopper.jira:gh-simplified-kanban-classic";
+
 #[derive(Debug, Serialize)]
-pub struct Project<'l> {
-    name: &'l str,
+pub struct Project {
+    name: String,
     #[serde(rename = "externalName")]
-    external_name: &'l str,
-    key: &'l str,
+    external_name: String,
+    key: String,
     #[serde(rename = "type")]
-    project_type: &'l str,
-    template: &'l str,
-    issues: Vec<Issue<'l>>,
+    project_type: String,
+    template: String,
+    issues: Vec<Issue>,
 }
 
-impl<'l> Project<'l> {
+impl Project {
     pub fn new(
-        name: &'l str,
-        key: &'l str,
-        issues: Vec<Issue<'l>>,
+        name: String,
+        key: String,
+        issues: Vec<Issue>,
     ) -> Self {
         Self {
-            name,
+            name: name.clone(),
             external_name: name,
             key,
-            project_type: "software",
-            template: "com.pyxis.greenhopper.jira:gh-simplified-kanban-classic",
+            project_type: String::from(PROJECT_TYPE),
+            template: String::from(TEMPLATE),
             issues,
         }
     }
