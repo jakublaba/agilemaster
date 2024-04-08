@@ -1,8 +1,8 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct User {
-    name: String,
+    pub(crate) name: String,
     groups: Vec<String>,
     active: bool,
     email: String,
@@ -18,6 +18,12 @@ impl User {
         email: String,
         full_name: String,
     ) -> Self {
-        Self { name, groups, active, email, full_name }
+        Self {
+            name,
+            groups,
+            active,
+            email,
+            full_name,
+        }
     }
 }

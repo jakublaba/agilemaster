@@ -3,8 +3,6 @@ use std::fs::File;
 use std::io;
 use std::io::Write;
 
-use serde::de::Error;
-
 use crate::cli::cli::Cli;
 use crate::gen::export_gen::ExportGenerator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
@@ -12,10 +10,10 @@ use crate::gen::issue_gen::IssueGenerator;
 use crate::gen::project_gen::ProjectGenerator;
 use crate::model::user::User;
 
-pub(crate) mod issue_gen;
 pub(crate) mod date_gen;
 pub(crate) mod export_gen;
 pub(crate) mod history_entry_gen;
+pub(crate) mod issue_gen;
 pub(crate) mod project_gen;
 
 pub(crate) trait Generator<T> {
@@ -42,14 +40,7 @@ pub fn generate_json(project_name: &String, args: &Cli) -> Result<(), AgileMaste
     let mut hist_entry_gen = HistoryEntryGenerator::new(args, &statuses)?;
     let mut issue_gen = IssueGenerator::new(args, &mut hist_entry_gen, &statuses)?;
     let mut proj_gen = ProjectGenerator::new(args, &mut issue_gen);
-    let usr = User::new(
-        String::from("jakublaba"),
-        vec![],
-        true,
-        String::from("jakub.maciej.laba@gmail.com"),
-        String::from("Jakub Łaba"),
-    );
-    let mut export_gen = ExportGenerator::new(usr, &mut proj_gen);
+    let mut export_gen = ExportGenerator::new(args.author.clone(), &mut proj_gen);
 
     let export = export_gen.generate();
     let json = serde_json::to_string(&export).map_err(|_| AgileMasterError)?;

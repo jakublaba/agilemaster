@@ -3,8 +3,8 @@ use rand::rngs::ThreadRng;
 use rand::thread_rng;
 
 use crate::cli::cli::Cli;
-use crate::gen::{AgileMasterError, Generator};
 use crate::gen::date_gen::DateGenerator;
+use crate::gen::{AgileMasterError, Generator};
 use crate::model::history_entry::HistoryEntry;
 use crate::model::history_item::HistoryItem;
 
@@ -18,10 +18,15 @@ pub(crate) struct HistoryEntryGenerator<'l> {
 impl<'l> HistoryEntryGenerator<'l> {
     pub fn new(cli_args: &'l Cli, statuses: &'l Vec<String>) -> Result<Self, AgileMasterError> {
         let rng = thread_rng();
-        let author = &cli_args.author;
+        let author = &cli_args.author.name;
         let date_gen = DateGenerator::new(cli_args).map_err(|_| AgileMasterError)?;
         dbg!(&date_gen);
-        Ok(Self { rng, author, date_gen, statuses })
+        Ok(Self {
+            rng,
+            author,
+            date_gen,
+            statuses,
+        })
     }
 
     fn rand_status(&mut self) -> &String {
