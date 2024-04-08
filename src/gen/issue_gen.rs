@@ -1,9 +1,9 @@
 use rand::rngs::ThreadRng;
 
 use crate::cli::cli::Cli;
-use crate::gen::{AgileMasterError, Generator};
 use crate::gen::date_gen::DateGenerator;
 use crate::gen::history_entry_gen::HistoryEntryGenerator;
+use crate::gen::{AgileMasterError, Generator};
 use crate::model::issue::Issue;
 
 pub(crate) struct IssueGenerator<'l> {
@@ -24,8 +24,15 @@ impl<'l> IssueGenerator<'l> {
         let counter = 1;
         let rng = rand::thread_rng();
         let date_gen = DateGenerator::new(cli_args).map_err(|_| AgileMasterError)?;
-        let reporter = cli_args.author.clone();
-        Ok(Self { counter, rng, date_gen, reporter, history_entry_gen, statuses })
+        let reporter = cli_args.author.name.clone();
+        Ok(Self {
+            counter,
+            rng,
+            date_gen,
+            reporter,
+            history_entry_gen,
+            statuses,
+        })
     }
 }
 
