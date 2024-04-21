@@ -22,7 +22,7 @@ Whether Team-Managed or Company-Managed is selected doesn't matter.
 
 # Usage
 Once user data `.json` and empty project on your Jira instance are created, you can use agilemaster.
-```sh
+```
 agilemaster \
 --name [name of your project - must match the name of project from your Jira instance] \
 --author [fully qualified name of the .json file with user data] \
