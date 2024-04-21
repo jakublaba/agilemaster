@@ -2,10 +2,10 @@ use std::{
     error::Error,
     fmt::{Display, Formatter},
     fs::File,
-    io::{self, BufReader},
+    io::BufReader,
 };
 
-use chrono::{DateTime, NaiveDateTime, ParseResult, Utc};
+use chrono::{DateTime, NaiveDateTime, Utc};
 use clap::Parser;
 
 use crate::model::user::User;

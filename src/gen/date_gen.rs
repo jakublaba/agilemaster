@@ -59,13 +59,6 @@ impl DateGenerator {
         Ok(date + TimeDelta::try_days(days).unwrap())
     }
 
-    pub fn next_before(&mut self, date: DateTime<Utc>) -> Result<DateTime<Utc>, DateGeneratorError> {
-        self.validate_date(&date)?;
-        let range = (date - self.start_date).num_days();
-        let days = self.rng.gen_range(0..range);
-        Ok(date - TimeDelta::try_days(days).unwrap())
-    }
-
     fn validate_date(&self, date: &DateTime<Utc>) -> Result<(), DateGeneratorError> {
         let range = (self.start_date + TimeDelta::try_days(1).unwrap())..self.end_date;
         if !range.contains(date) {

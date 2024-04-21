@@ -1,6 +1,4 @@
 use std::error::Error;
-use std::fmt::Display;
-use std::io::Write;
 
 use clap::Parser;
 
@@ -16,5 +14,5 @@ fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
     dbg!(&args);
 
-    generate_json(&args.name, &args)
+    generate_json(&args)
 }
