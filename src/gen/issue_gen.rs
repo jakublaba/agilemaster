@@ -24,7 +24,7 @@ impl<'l> IssueGenerator<'l> {
         let counter = 1;
         let date_gen = DateGenerator::new(cli_args).map_err(|_| AgileMasterError)?;
         let reporter = cli_args.author.name.clone();
-        let status_ids = request_statuses(&cli_args.auth_params, &cli_args.statuses)
+        let status_ids = request_statuses(&cli_args.auth, &cli_args.statuses)
             .await
             .map_err(|_| AgileMasterError)?;
         Ok(Self {

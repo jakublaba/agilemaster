@@ -44,7 +44,7 @@ pub(crate) struct Cli {
     pub(crate) author: User,
     /// Fully qualified name (with path) of json file with authentication data
     #[arg(short, long, value_name = "PATH", value_parser = parse_struct::< AuthParams >)]
-    pub(crate) auth_params: AuthParams,
+    pub(crate) auth: AuthParams,
     /// Start date of the project (dd-mm-YYYY)
     #[arg(short, long, value_name = "DATE", value_parser = parse_date)]
     pub(crate) start: DateTime<Utc>,
@@ -53,7 +53,7 @@ pub(crate) struct Cli {
     pub(crate) end: DateTime<Utc>,
     /// Amount of issues to generate
     #[arg(short, long, value_name = "AMOUNT")]
-    pub(crate) issue_amount: i32,
+    pub(crate) issues: i32,
     /// Space-separated list of statuses available in project
     #[arg(short, long, value_name = "STATUSES", action = ArgAction::Append, num_args = 1..)]
     pub(crate) statuses: Vec<String>,
