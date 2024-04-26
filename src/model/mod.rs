@@ -9,7 +9,7 @@ pub(crate) mod history_entry;
 pub(crate) mod history_item;
 pub(crate) mod custom_field;
 pub(crate) mod time_in_status;
-pub(crate) mod auth_params;
+pub(crate) mod jira_rest;
 
 pub(crate) fn serialize_date<S: Serializer>(date: &DateTime<Utc>, serializer: S) -> Result<S::Ok, S::Error> {
     let str = date.to_rfc3339();

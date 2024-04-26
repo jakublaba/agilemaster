@@ -9,7 +9,8 @@ mod model;
 mod cli;
 mod gen;
 
-fn main() -> Result<(), impl Error> {
+#[tokio::main]
+async fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
     dbg!(&args);
 

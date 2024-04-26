@@ -9,7 +9,7 @@ use chrono::{DateTime, NaiveDateTime, Utc};
 use clap::{ArgAction, Parser};
 use serde::de::DeserializeOwned;
 
-use crate::model::auth_params::AuthParams;
+use crate::model::jira_rest::AuthParams;
 use crate::model::user::User;
 
 #[derive(Debug)]

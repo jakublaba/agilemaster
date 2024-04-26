@@ -31,13 +31,7 @@ impl Display for AgileMasterError {
 impl std::error::Error for AgileMasterError {}
 
 pub fn generate_json(args: &Cli) -> Result<(), AgileMasterError> {
-    let statuses = vec![
-        String::from("BACKLOG"),
-        String::from("SELECTED FOR DEVELOPMENT"),
-        String::from("IN PROGRESS"),
-        String::from("DONE"),
-    ];
-    let mut hist_entry_gen = HistoryEntryGenerator::new(args, &statuses)?;
+    let mut hist_entry_gen = HistoryEntryGenerator::new(args, &args.statuses)?;
     let mut issue_gen = IssueGenerator::new(args, &mut hist_entry_gen)?;
     let mut proj_gen = ProjectGenerator::new(args, &mut issue_gen);
     let mut export_gen = ExportGenerator::new(args.author.clone(), &mut proj_gen);
