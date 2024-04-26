@@ -52,14 +52,17 @@ pub async fn request_statuses(auth: &AuthParams, statuses: &Vec<String>) -> Resu
         return Err(JiraError::new(&format!("Call to Jira rest api failed with status {}", response.status())));
     }
 
-    let statuses_from_api: Vec<Status> = response.json()
+    let statuses_from_api = response.json::<Vec<Status>>()
         .await
-        .map_err(|e| JiraError::new(&format!("Failed to deserialize response from Jira rest api: {e}")))?;
+        .map_err(|e| JiraError::new(&format!("Failed to deserialize response from Jira rest api: {e}")))?
+        .iter()
+        .map(|s| Status { id: s.id.clone(), name: s.name.to_uppercase() })
+        .collect::<Vec<_>>();
 
     let mut status_map = HashMap::new();
     for status in statuses_from_api {
-        if statuses.contains(&status.name) {
-            let status_id = status.id.parse::<i32>().map_err(|e| JiraError::new(&format!(
+        if statuses.contains(&status.name.to_uppercase()) {
+            let status_id = status.id.parse::<i32>().map_err(|_| JiraError::new(&format!(
                 "Invalid status id: {}", &status.id
             )))?;
             status_map.insert(status.name.clone(), status_id);
