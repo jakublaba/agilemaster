@@ -32,7 +32,8 @@ impl std::error::Error for AgileMasterError {}
 
 pub fn generate_json(args: &Cli) -> Result<(), AgileMasterError> {
     let statuses = vec![
-        String::from("TO DO"),
+        String::from("BACKLOG"),
+        String::from("SELECTED FOR DEVELOPMENT"),
         String::from("IN PROGRESS"),
         String::from("DONE"),
     ];

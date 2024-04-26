@@ -9,7 +9,6 @@ mod model;
 mod cli;
 mod gen;
 
-// todo add loggers
 fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
     dbg!(&args);
