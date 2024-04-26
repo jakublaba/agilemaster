@@ -9,10 +9,8 @@ mod model;
 mod cli;
 mod gen;
 
-// todo add loggers
-fn main() -> Result<(), impl Error> {
+#[tokio::main]
+async fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
-    dbg!(&args);
-
-    generate_json(&args)
+    generate_json(&args).await
 }

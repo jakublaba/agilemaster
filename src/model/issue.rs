@@ -1,10 +1,12 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
 
+use crate::model::{serialize_date, serialize_date_opt};
+use crate::model::custom_field::CustomField;
 use crate::model::history_entry::HistoryEntry;
-use crate::model::serialize_date;
 
-const ISSUE_TYPE: &str = "Story";
+const ISSUE_TYPE: &str = "Task";
+pub const RESOLUTION_STATUS: &str = "DONE";
 
 #[derive(Debug, Serialize)]
 pub struct Issue {
@@ -18,6 +20,12 @@ pub struct Issue {
     updated: DateTime<Utc>,
     summary: String,
     history: Vec<HistoryEntry>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    resolution: Option<String>,
+    #[serde(rename = "resolutionDate", serialize_with = "serialize_date_opt", skip_serializing_if = "Option::is_none")]
+    resolution_date: Option<DateTime<Utc>>,
+    #[serde(rename = "customFields", skip_serializing_if = "Vec::is_empty")]
+    custom_fields: Vec<CustomField>,
 }
 
 impl Issue {
@@ -28,8 +36,26 @@ impl Issue {
         updated: DateTime<Utc>,
         summary: String,
         history: Vec<HistoryEntry>,
+        resolution_date: Option<DateTime<Utc>>,
+        custom_fields: Vec<CustomField>,
     ) -> Self {
         let issue_type = String::from(ISSUE_TYPE);
-        Self { status, reporter, issue_type, created, updated, summary, history }
+        let resolution = if resolution_date.is_some() {
+            Some(String::from(RESOLUTION_STATUS))
+        } else {
+            None
+        };
+        Self {
+            status,
+            reporter,
+            issue_type,
+            created,
+            updated,
+            summary,
+            history,
+            resolution,
+            resolution_date,
+            custom_fields,
+        }
     }
 }

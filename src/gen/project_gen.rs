@@ -24,7 +24,7 @@ pub(crate) struct ProjectGenerator<'l> {
 impl<'l> ProjectGenerator<'l> {
     pub fn new(cli_args: &'l Cli, issue_gen: &'l mut IssueGenerator<'l>) -> Self {
         let name = cli_args.name.clone();
-        let issue_amount = cli_args.issue_amount;
+        let issue_amount = cli_args.issues;
         Self { name, issue_amount, issue_gen }
     }
 }

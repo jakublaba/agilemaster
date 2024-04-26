@@ -9,7 +9,7 @@ pub struct HistoryEntry {
     author: String,
     #[serde(serialize_with = "serialize_date")]
     pub(crate) created: DateTime<Utc>,
-    items: Vec<HistoryItem>,
+    pub(crate) items: Vec<HistoryItem>,
 }
 
 impl HistoryEntry {

@@ -9,10 +9,10 @@ pub struct HistoryItem {
     field_type: String,
     #[serde(rename = "fromString")]
     from_string: String,
-    from: String,
+    pub(crate) from: String,
     #[serde(rename = "toString")]
     to_string: String,
-    to: String,
+    pub(crate) to: String,
 }
 
 impl HistoryItem {
