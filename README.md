@@ -7,11 +7,19 @@ Before you can start using agilemaster, you need to create a `.json` file descri
 No specific naming or path is required for this file.
 ```json
 {
-  "name": "jakublaba",
+  "name": "sampleusr",
   "groups": [],
   "active": true,
-  "email": "jakub.maciej.laba@gmail.com",
-  "fullname": "Jakub Łaba"
+  "email": "user@example.com",
+  "fullname": "John Smith"
+}
+```
+You also need to create a `.json` file with authentication data for your Jira instance, since its rest api is used to extract some instance-specific data.
+```json
+{
+  "email": "user@example.com",
+  "apiKey": "secret-key",
+  "url": "https://my-instance.atlassian.net"
 }
 ```
 **Warning:** Please note that `fullname` is spelled all lowercase, not camelCase
