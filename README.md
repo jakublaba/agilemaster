@@ -23,12 +23,15 @@ Whether Team-Managed or Company-Managed is selected doesn't matter.
 # Usage
 Once user data `.json` and empty project on your Jira instance are created, you can use agilemaster.
 ```
-agilemaster \
---name [name of your project - must match the name of project from your Jira instance] \
---author [fully qualified name of the .json file with user data] \
---start [project start date in dd-mm-YY format] \
---end [project end date in dd-mm-YY format] \
---issue-amount [total amount of issues/tasks to generate in the project]
+Options:
+  -n, --name <NAME>             Name of the generated project
+  -a, --author <PATH>           Fully qualified name (with path) of json file with user data
+  -a, --auth <PATH>             Fully qualified name (with path) of json file with authentication data
+  -s, --start <DATE>            Start date of the project (dd-mm-YYYY)
+  -e, --end <DATE>              End date of the project (dd-mm-YYYY)
+  -i, --issues <AMOUNT>         Amount of issues to generate
+  -s, --statuses <STATUSES>...  Space-separated list of statuses available in project
+  -h, --help                    Print help
+  -V, --version                 Print version
 ```
 To display this help, you can use `agilemaster --help`.
-Note that each flag also supports a shorthand for convenience: `--name -> -n`, `--issue-amount -> -i`, `--help -> -h`, etc.
