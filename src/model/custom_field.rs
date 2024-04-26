@@ -22,19 +22,23 @@ impl CustomField {
     pub fn time_in_status(
         status_ids: &HashMap<String, i32>,
         history: &Vec<HistoryEntry>,
-    ) -> Self {
+    ) -> Vec<Self> {
         let mut value = String::new();
         let time_spent = calculate_time_spent(&history);
         for (status, millis) in time_spent {
             let id = status_ids.get(&status).unwrap();
-            value.push_str(&format!("{id}{DATA_SEP}1{DATA_SEP}{millis}{RECORD_SEP}"));
+            let s = &format!("{id}{DATA_SEP}1{DATA_SEP}{millis}{RECORD_SEP}");
+            value.push_str(s);
         }
         // get rid of trailing data record separator
         value.truncate(value.len() - RECORD_SEP.len());
+        if value.is_empty() {
+            return vec![];
+        }
 
         let field_name = String::from(TIME_IN_STATUS_NAME);
         let field_type = String::from(TIME_IN_STATUS_TYPE);
-        Self { field_name, field_type, value }
+        vec![Self { field_name, field_type, value }]
     }
 }
 
@@ -48,10 +52,11 @@ fn calculate_time_spent(history: &Vec<HistoryEntry>) -> HashMap<String, i64> {
     for w in history.windows(2) {
         let current = &w[0];
         let next = &w[1];
-        let status = &current.items[0].to;
+        let status = &current.items[0].from;
         let duration = (next.created - current.created).num_milliseconds();
-        let entry = time_spent.entry(status.clone()).or_insert(0);
-        *entry += duration;
+        time_spent.entry(status.clone())
+            .and_modify(|time| *time += duration)
+            .or_insert(duration);
     }
 
     time_spent

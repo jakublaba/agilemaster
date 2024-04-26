@@ -12,7 +12,5 @@ mod gen;
 #[tokio::main]
 async fn main() -> Result<(), impl Error> {
     let args = Cli::parse();
-    dbg!(&args);
-
     generate_json(&args).await
 }

@@ -55,7 +55,7 @@ impl<'l> Generator<Issue> for IssueGenerator<'l> {
         } else {
             None
         };
-        let custom_fields = vec![CustomField::time_in_status(&self.status_ids, &history)];
+        let custom_fields = CustomField::time_in_status(&self.status_ids, &history);
         let issue = Issue::new(
             status,
             self.reporter.clone(),

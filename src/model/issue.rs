@@ -20,10 +20,11 @@ pub struct Issue {
     updated: DateTime<Utc>,
     summary: String,
     history: Vec<HistoryEntry>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     resolution: Option<String>,
-    #[serde(rename = "resolutionDate", serialize_with = "serialize_date_opt")]
+    #[serde(rename = "resolutionDate", serialize_with = "serialize_date_opt", skip_serializing_if = "Option::is_none")]
     resolution_date: Option<DateTime<Utc>>,
-    #[serde(rename = "customFields")]
+    #[serde(rename = "customFields", skip_serializing_if = "Vec::is_empty")]
     custom_fields: Vec<CustomField>,
 }
 
